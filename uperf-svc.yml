@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: uperf-service
+  annotations:
+    metallb.universe.tf/address-pool: addresspool-l2
+spec:
+  ports:
+  - name: uperf
+    port: 20000
+    protocol: TCP
+    targetPort: 20000
+  - name: uperf-1
+    port: 20001
+    protocol: TCP
+    targetPort: 20001
+  - name: uperf-2
+    port: 20002
+    protocol: TCP
+    targetPort: 20002
+  - name: uperf-3
+    port: 20003
+    protocol: TCP
+    targetPort: 20003
+  - name: uperf-4
+    port: 20004
+    protocol: TCP
+    targetPort: 20004
+  - name: uperf-5
+    port: 20005
+    protocol: TCP
+    targetPort: 20005
+  - name: uperf-6
+    port: 20006
+    protocol: TCP
+    targetPort: 20006
+  - name: uperf-7
+    port: 20007
+    protocol: TCP
+    targetPort: 20007
+  - name: uperf-8
+    port: 20008
+    protocol: TCP
+    targetPort: 20008
+  - name: uperf-10
+    port: 20009
+    protocol: TCP
+    targetPort: 20009
+  - name: uperf-11
+    port: 20010
+    protocol: TCP
+    targetPort: 20010
+  - name: uperf-12
+    port: 20011
+    protocol: TCP
+    targetPort: 20011
+  - name: uperf-13
+    port: 20012
+    protocol: TCP
+    targetPort: 20012
+  selector:
+    app: uperf-server-1
+  type: LoadBalancer

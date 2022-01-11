@@ -1,0 +1,27 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: web-server-l3
+  namespace: default
+spec:
+  template:
+    metadata:
+      name: web-server-l3
+      labels:
+        app: web-server-l3
+        group: kb-mb-wl
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""
+      containers:
+      - name: nginx
+        image: "docker.io/nginxdemos/hello"
+        imagePullPolicy: IfNotPresent
+  replicas: 5
+  selector:
+    matchLabels:
+      app: web-server-l3
+  triggers:
+  - type: ConfigChange
+  strategy:
+    type: RollingUpdate        

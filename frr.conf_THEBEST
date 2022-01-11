@@ -1,0 +1,60 @@
+password zebra
+
+# debug bgp updates
+# debug bgp neighbor
+# debug zebra nht
+# debug bgp nht
+# debug bfd peer
+
+frr version 7.5
+frr defaults traditional
+
+log file /tmp/frr.log debugging
+log timestamp precision 3
+
+route-map RMAP permit 10
+set ipv6 next-hop prefer-global
+router bgp 65001
+  bgp router-id 192.168.216.1
+  no bgp network import-check
+  no bgp ebgp-requires-policy
+  no bgp default ipv4-unicast
+
+  neighbor 192.168.216.10 remote-as 65001
+  neighbor 192.168.216.10 password test
+  neighbor 192.168.216.10 bfd profile echo
+  neighbor 192.168.216.11 remote-as 65001
+  neighbor 192.168.216.11 password test
+  neighbor 192.168.216.11 bfd profile echo
+  neighbor 192.168.216.12 remote-as 65001
+  neighbor 192.168.216.12 password test
+  neighbor 192.168.216.12 bfd profile echo
+  neighbor 192.168.216.13 remote-as 65001
+  neighbor 192.168.216.13 password test
+  neighbor 192.168.216.13 bfd profile echo
+  neighbor 192.168.216.14 remote-as 65001
+  neighbor 192.168.216.14 password test
+  neighbor 192.168.216.14 bfd profile echo
+  address-family ipv4 unicast
+    neighbor 192.168.216.10 next-hop-self
+    neighbor 192.168.216.10 activate
+    neighbor 192.168.216.11 next-hop-self
+    neighbor 192.168.216.11 activate
+    neighbor 192.168.216.12 next-hop-self
+    neighbor 192.168.216.12 activate
+    neighbor 192.168.216.13 next-hop-self
+    neighbor 192.168.216.13 activate
+    neighbor 192.168.216.14 next-hop-self
+    neighbor 192.168.216.14 activate
+  exit-address-family
+!
+
+bfd
+  profile echo
+    detect-multiplier 37
+    transmit-interval 35
+    receive-interval 35
+    echo-mode
+    minimum-ttl 10
+  !
+!

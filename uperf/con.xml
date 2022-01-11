@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<profile name="http-get-test">
+  <group nthreads="$nthr">
+    <transaction duration="$duration" iterations="$iter">
+       <flowop type="connect" options="remotehost=$h protocol=tcp"/>
+       <flowop type="read" options="size=128" />
+       <flowop type="disconnect" />
+    </transaction>
+  </group>
+</profile>

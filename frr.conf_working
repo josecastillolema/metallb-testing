@@ -1,0 +1,35 @@
+password zebra
+
+debug bgp updates
+debug bgp neighbor
+debug zebra nht
+debug bgp nht
+debug bfd peer
+
+frr version 7.0
+
+log file /tmp/frr.log debugging
+log timestamp precision 3
+
+route-map RMAP permit 10
+set ipv6 next-hop prefer-global
+router bgp 65001
+  bgp router-id 192.168.216.1
+  no bgp network import-check
+  no bgp ebgp-requires-policy
+  no bgp default ipv4-unicast
+
+router bgp 65001 vrf blue
+  neighbor 192.168.216.13 remote-as 65002
+  address-family ipv4 unicast
+    neighbor 192.168.216.13 next-hop-self
+    neighbor 192.168.216.13 activate
+  exit-address-family
+
+router bgp 65001 vrf red
+  neighbor 192.168.216.14 remote-as 65003
+  address-family ipv4 unicast
+    neighbor 192.168.216.14 next-hop-self
+    neighbor 192.168.216.14 activate
+  exit-address-family
+

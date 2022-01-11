@@ -1,0 +1,43 @@
+apiVersion: metallb.io/v1alpha1
+kind: AddressPool
+metadata:
+  name: addresspool-l2
+  namespace: metallb-system
+spec:
+  protocol: layer2
+  addresses:
+    - 192.168.216.100-192.168.218.255
+---
+apiVersion: metallb.io/v1alpha1
+kind: AddressPool
+metadata:
+  name: addresspool-l3
+  namespace: metallb-system
+spec:
+  protocol: bgp
+  addresses:
+    - 10.10.10.10-10.10.12.255
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPPeer
+metadata:
+  name: peer-65001
+  namespace: metallb-system
+spec:
+  peerAddress: 192.168.216.1
+  peerASN: 65001
+  myASN: 65001
+  password: test
+  # holdTime: 10
+
+  #---
+  #apiVersion: metallb.io/v1beta1
+  #kind: BGPPeer
+  #metadata:
+  #  name: peer-65003
+  #  namespace: metallb-system
+  #spec:
+  #  peerAddress: 192.168.216.1
+  #  peerASN: 65001
+  #  myASN: 65003
+

@@ -1,0 +1,1 @@
+oc  -n metallb-system exec speaker-7dg78 -- vtysh -c "show bgp summary"

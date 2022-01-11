@@ -1,0 +1,9 @@
+apiVersion: metallb.io/v1alpha1
+kind: AddressPool
+metadata:
+  name: addresspool-l3-b
+  namespace: metallb-system
+spec:
+  protocol: bgp
+  addresses:
+    - 6.6.6.6-6.6.6.10
