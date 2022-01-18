@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: uperf-pod-client
+spec:
+  containers:
+  - name: app
+    image: quay.io/cloud-bulldozer/uperf:latest
+    args:
+    - sleep
+    - infinity
+  securityContext:
+    privileged: true
+  nodeSelector:
+    kubernetes.io/hostname: worker001-5039ms

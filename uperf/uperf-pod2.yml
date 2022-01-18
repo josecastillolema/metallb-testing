@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: uperf-client
+spec:
+  containers:
+  - name: app
+    image: quay.io/cloud-bulldozer/uperf:latest
+    args:
+    - sleep
+    - infinity
+  resources:
+      limits:
+        memory: "10Gi"
+        cpu: "5000m"
+  securityContext:
+    privileged: true

@@ -1,0 +1,14 @@
+<?xml version=1.0?>
+<profile name="stream-tcp-64-rsize-1">
+      <group nthreads="1">
+          <transaction iterations="1">
+            <flowop type="connect" options="remotehost=$h protocol=tcp port=30001"/>
+          </transaction>
+          <transaction duration="60s">
+            <flowop type=write options="count=16 size=64"/>
+          </transaction>
+          <transaction iterations="1">
+            <flowop type=disconnect />
+          </transaction>
+      </group>
+</profile>

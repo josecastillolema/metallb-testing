@@ -1,0 +1,30 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: uperf-server
+spec:
+  template:
+    metadata:
+      name: uperf-server-1
+      labels:
+        app: uperf-server-1
+        group: kb-mb-wl
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""
+      containers:
+      - name: benchmark
+        image: 'quay.io/cloud-bulldozer/uperf:latest'
+        imagePullPolicy: Always
+        command: ["/bin/sh","-c"]
+        args: ["uperf -s -v -P 30000"]
+      securityContext:
+        privileged: true        
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uperf-server-1
+  triggers:
+  - type: ConfigChange
+  strategy:
+    type: RollingUpdate        

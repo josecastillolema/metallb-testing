@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: uperf-server-test2
+  name: uperf-server-ripsaw
+  namespace: default
+spec:
+  containers:
+  - args:
+    - uperf -s -v -P 20000
+    command:
+    - /bin/sh
+    - -c
+    image: quay.io/cloud-bulldozer/uperf:latest
+    imagePullPolicy: Always
+    name: benchmark
+    resources: {}
+  securityContext:
+    sysctls:
+    - name: net.ipv4.ip_local_port_range
+      value: 20000 20011
