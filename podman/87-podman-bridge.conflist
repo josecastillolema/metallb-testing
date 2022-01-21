@@ -1,0 +1,26 @@
+{
+  "cniVersion": "0.4.0",
+  "name": "podman",
+  "plugins": [
+    {
+      "type": "ipvlan",
+      "master": "baremetal",
+      "bridge": "cni-podman0",
+      "isGateway": false,
+      "isDefaultGateway": false,
+      "ipMasq": false,
+      "hairpinMode": false,
+      "promiscMode": true,
+      "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [
+            {
+              "subnet": "192.168.216.0/21"
+            }
+          ]
+        ]
+      }
+    }
+  ]
+}

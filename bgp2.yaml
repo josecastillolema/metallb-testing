@@ -1,0 +1,12 @@
+apiVersion: metallb.io/v1beta1
+kind: BGPPeer
+metadata:
+  name: peer-65002
+  namespace: metallb-system
+spec:
+  peerAddress: 192.168.216.200
+  peerASN: 65002
+  myASN: 65000
+  password: test
+  bfdProfile: bfdprofilefull
+

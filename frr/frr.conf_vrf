@@ -13,23 +13,35 @@ log timestamp precision 3
 
 route-map RMAP permit 10
 set ipv6 next-hop prefer-global
-router bgp 65001
-  bgp router-id 192.168.216.1
-  no bgp network import-check
-  no bgp ebgp-requires-policy
-  no bgp default ipv4-unicast
 
-router bgp 65002 vrf blue
-  neighbor 192.168.216.13 remote-as 65001
+router bgp 65001 vrf blue
+  bgp router-id 192.168.216.1
+  neighbor 192.168.216.13 remote-as 65000
+  neighbor 192.168.216.13 password test
+  neighbor 192.168.216.13 bfd profile echo
   address-family ipv4 unicast
     neighbor 192.168.216.13 next-hop-self
     neighbor 192.168.216.13 activate
   exit-address-family
+!
 
-router bgp 65003 vrf red
-  neighbor 192.168.216.14 remote-as 65001
+router bgp 65002 vrf red
+  bgp router-id 192.168.216.1
+  neighbor 192.168.216.14 remote-as 65000
+  neighbor 192.168.216.13 password test
+  neighbor 192.168.216.13 bfd profile echo
   address-family ipv4 unicast
     neighbor 192.168.216.14 next-hop-self
     neighbor 192.168.216.14 activate
   exit-address-family
+!
 
+bfd
+  profile echo
+    detect-multiplier 37
+    transmit-interval 35
+    receive-interval 35
+    echo-mode
+    minimum-ttl 10
+  !
+!

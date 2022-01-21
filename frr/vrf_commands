@@ -1,0 +1,6 @@
+ 1017  sudo ip link add red type vrf table 10
+ 1019  sudo ip link set dev red up
+ 1020  sudo ip link set dev baremetal master red
+ 1021  sudo ip li add blue type vrf table 20
+ 1022  sudo ip li set dev blue up
+ 1023  sudo ip li set dev baremetal master blue
