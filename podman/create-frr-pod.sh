@@ -3,6 +3,7 @@ set -e
 
 NUMBER_OF_FRR_INSTANCE=5
 BM_NETWORK_PREF="192.168.220"
+BM_NETWORK_PREF_END="192.168.223"
 CLUSTER_ASN=65001
 
 echo "------------------DELETE OLD FRR PODS------------------"
@@ -100,3 +101,11 @@ echo "-------------------------------------------------------"
 
 done
 echo "------------------FINISHED CREATING ALL FRR PODS-------"
+
+echo "------------------CREATE METALLB CUSTOM RESOURCES------"
+envsubst < metallb-cr.yaml | oc apply -f -
+
+echo "------------------LISTS METALLB CUSTOM RESOURCES-------"
+oc get addresspool -A
+oc get bgppeers -A
+echo "-------------------------------------------------------"
