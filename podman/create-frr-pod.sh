@@ -113,6 +113,7 @@ envsubst < metallb-cr.yaml | oc apply -f -
 
 for k in $(seq 1 $NUMBER_OF_FRR_INSTANCE)
 do
+PEER_IP="$BM_NETWORK_PREF."$((100+$k))
 cat << EOF | oc apply -f -
 ---
 apiVersion: metallb.io/v1beta1
@@ -121,7 +122,7 @@ metadata:
   name: peer-$(($CLUSTER_ASN+$k))
   namespace: metallb-system
 spec:
-  peerAddress: 192.168.216.1
+  peerAddress: $PEER_IP
   peerASN: $(($CLUSTER_ASN+$k))
   myASN: $CLUSTER_ASN
   password: test
