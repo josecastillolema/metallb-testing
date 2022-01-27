@@ -13,7 +13,7 @@ metadata:
 spec:
   protocol: layer2
   addresses:
-    - 192.168.220.200-192.168.223.254
+    - "$BM_NETWORK_PREF".200-"$BM_NETWORK_PREF_END".254
 ---
 apiVersion: metallb.io/v1alpha1
 kind: AddressPool
@@ -24,14 +24,4 @@ spec:
   protocol: bgp
   addresses:
     - 10.10.10.10-10.10.15.255
----
-apiVersion: metallb.io/v1beta1
-kind: BGPPeer
-metadata:
-  name: peer-65001
-  namespace: metallb-system
-spec:
-  peerAddress: 192.168.216.1
-  peerASN: 65001
-  myASN: 65001
-  password: test
+
