@@ -106,6 +106,9 @@ sleep 5
 
 echo "------------------CREATE METALLB CUSTOM RESOURCES------"
 oc label ns metallb-system openshift.io/cluster-monitoring=true --overwrite=true
+
+export BM_NETWORK_PREF=$BM_NETWORK_PREF
+export BM_NETWORK_PREF_END=$BM_NETWORK_PREF_END
 envsubst < metallb-cr.yaml | oc apply -f -
 
 for k in $(seq 1 $NUMBER_OF_FRR_INSTANCE)
