@@ -13,7 +13,7 @@ metadata:
 spec:
   protocol: layer2
   addresses:
-    - "$BM_NETWORK_PREF".200-"$BM_NETWORK_PREF_END".254
+    - $BM_NETWORK_PREF.200-$BM_NETWORK_PREF_END.254
 ---
 apiVersion: metallb.io/v1alpha1
 kind: AddressPool
