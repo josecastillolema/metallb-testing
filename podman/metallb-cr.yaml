@@ -1,0 +1,27 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: MetalLB
+metadata:
+  name: metallb
+  namespace: metallb-system
+---
+apiVersion: metallb.io/v1alpha1
+kind: AddressPool
+metadata:
+  name: addresspool-l2
+  namespace: metallb-system
+spec:
+  protocol: layer2
+  addresses:
+    - "$BM_NETWORK_PREF".200-"$BM_NETWORK_PREF_END".254
+---
+apiVersion: metallb.io/v1alpha1
+kind: AddressPool
+metadata:
+  name: addresspool-l3
+  namespace: metallb-system
+spec:
+  protocol: bgp
+  addresses:
+    - 10.10.10.10-10.10.15.255
+
