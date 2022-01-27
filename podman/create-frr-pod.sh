@@ -101,9 +101,11 @@ echo "-------------------------------------------------------"
 
 done
 echo "------------------FINISHED CREATING ALL FRR PODS-------"
+echo "------------------PAUSE FOR A FEW SECONDS--------------"
+sleep 5
 
 echo "------------------CREATE METALLB CUSTOM RESOURCES------"
-oc label ns metallb-system openshift.io/cluster-monitoring=true
+oc label ns metallb-system openshift.io/cluster-monitoring=true --overwrite=true
 envsubst < metallb-cr.yaml | oc apply -f -
 
 for k in $(seq 1 $NUMBER_OF_FRR_INSTANCE)
