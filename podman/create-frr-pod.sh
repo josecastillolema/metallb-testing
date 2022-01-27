@@ -123,7 +123,7 @@ metadata:
 spec:
   peerAddress: 192.168.216.1
   peerASN: $(($CLUSTER_ASN+$k))
-  myASN: "$CLUSTER_ASN"
+  myASN: $CLUSTER_ASN
   password: test
 EOF
 done
