@@ -103,7 +103,25 @@ done
 echo "------------------FINISHED CREATING ALL FRR PODS-------"
 
 echo "------------------CREATE METALLB CUSTOM RESOURCES------"
+oc label ns metallb-system openshift.io/cluster-monitoring=true
 envsubst < metallb-cr.yaml | oc apply -f -
+
+for k in $(seq 1 $NUMBER_OF_FRR_INSTANCE)
+do
+cat << EOF | oc apply -f -
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPPeer
+metadata:
+  name: peer-$(($CLUSTER_ASN+$k))
+  namespace: metallb-system
+spec:
+  peerAddress: 192.168.216.1
+  peerASN: $(($CLUSTER_ASN+$k))
+  myASN: "$CLUSTER_ASN"
+  password: test
+EOF
+done
 
 echo "------------------LISTS METALLB CUSTOM RESOURCES-------"
 oc get addresspool -A
