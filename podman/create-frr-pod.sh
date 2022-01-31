@@ -18,8 +18,8 @@ fi
 echo "------------------GET OCP NODES FROM CLUSTER-----------"
 
 export KUBECONFIG="/home/kni/clusterconfigs/auth/kubeconfig"
-
-NODE_LIST=$(oc get nodes --no-headers -o wide | grep worker | grep -iv worker-lb | grep -iv worker-rt | awk '{print $6}')
+HOST_LIST=$(oc get bmh -A -o wide | grep 'e16' | awk '{print$2}')
+NODE_LIST=$(oc get nodes $HOST_LIST --no-headers -o wide | grep worker | grep -iv worker-lb | grep -iv worker-rt | grep -iv worker-spk | awk '{print $6}')
 
 echo "------------------COPY PODMAN NETWORK CONFIG-----------"
 cp 87-podman-bridge.conflist /etc/cni/net.d/87-podman-bridge.conflist
@@ -54,7 +54,6 @@ for node in $NODE_LIST
 do
 cat <<EOT >> /root/frr-pod-$i/frr.conf
   neighbor $node remote-as $CLUSTER_ASN
-  neighbor $node update-source $POD_IP
   neighbor $node password test
   neighbor $node bfd profile echo
 EOT
