@@ -119,6 +119,7 @@ spec:
   peerASN: $(($CLUSTER_ASN+$k))
   myASN: "$CLUSTER_ASN"
   password: test
+  bfdProfile: bfdprofilefull
 EOF
 done
 
