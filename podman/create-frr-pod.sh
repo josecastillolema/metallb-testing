@@ -5,6 +5,8 @@ NUMBER_OF_FRR_INSTANCE=5
 BM_NETWORK_PREF="192.168.220"
 BM_NETWORK_PREF_END="192.168.223"
 CLUSTER_ASN=65001
+BFD_PROFILE="bfdprofilefull"
+RACK_ID="e17"
 
 echo "------------------DELETE OLD FRR PODS------------------"
 old_pods=$(podman ps -a | grep frr | awk '{print $1}' | xargs)
@@ -18,7 +20,7 @@ fi
 echo "------------------GET OCP NODES FROM CLUSTER-----------"
 
 export KUBECONFIG="/home/kni/clusterconfigs/auth/kubeconfig"
-HOST_LIST=$(oc get bmh -A -o wide | grep 'e16' | awk '{print$2}')
+HOST_LIST=$(oc get bmh -A -o wide | grep $RACK_ID | awk '{print$2}')
 NODE_LIST=$(oc get nodes $HOST_LIST --no-headers -o wide | grep worker | grep -iv worker-lb | grep -iv worker-rt | grep -iv worker-spk | awk '{print $6}')
 
 echo "------------------COPY PODMAN NETWORK CONFIG-----------"
@@ -74,7 +76,10 @@ done
 cat <<EOT >> /root/frr-pod-$i/frr.conf
   exit-address-family
 !
+EOT
 
+if [ "$BFD_PROFILE" != "" ]; then
+cat <<EOT >> /root/frr-pod-$i/frr.conf
 bfd
   profile echo
     detect-multiplier 37
@@ -85,6 +90,7 @@ bfd
   !
 !
 EOT
+fi
 
 # create FRR podman containers
 echo "------------------CREATE FRR PODS---------POD-$i-------"
@@ -125,7 +131,7 @@ spec:
   peerASN: $(($CLUSTER_ASN+$k))
   myASN: $CLUSTER_ASN
   password: test
-  bfdProfile: bfdprofilefull
+  bfdProfile: $BFD_PROFILE
 EOF
 done
 
