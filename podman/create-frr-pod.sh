@@ -7,6 +7,8 @@ BM_NETWORK_PREF_END="192.168.223"
 CLUSTER_ASN=65001
 BFD_PROFILE="bfdprofilefull"
 RACK_ID="e17"
+starttime=$(date +%s%N | cut -b1-13)
+target=$(oc get --no-headers route -n dittybopper | awk {'print $2'})
 
 echo "------------------DELETE OLD FRR PODS------------------"
 old_pods=$(podman ps -a | grep frr | awk '{print $1}' | xargs)
@@ -143,3 +145,8 @@ echo "------------------LISTS METALLB CUSTOM RESOURCES-------"
 oc get addresspool -A
 oc get bgppeers -A
 echo "-------------------------------------------------------"
+
+
+# sleep 600
+# endtime=$(date +%s%N | cut -b1-13)
+# curl -H "Content-Type: application/json" -X POST -d "{\"dashboardId\":1,\"time\":$starttime,\"isRegion\":\"true\",\"timeEnd\":$endtime,\"tags\":[\"metallb\"],\"text\":\"$NUMBER_OF_FRR_INSTANCE sessions to 1 worker without BFD\"}" http://admin:admin@$target/api/annotations
