@@ -22,6 +22,7 @@ echo "------------------GET OCP NODES FROM CLUSTER-----------"
 export KUBECONFIG="/home/kni/clusterconfigs/auth/kubeconfig"
 HOST_LIST=$(oc get bmh -A -o wide | grep $RACK_ID | awk '{print$2}')
 NODE_LIST=$(oc get nodes $HOST_LIST --no-headers -o wide | grep worker | grep -iv worker-lb | grep -iv worker-rt | grep -iv worker-spk | awk '{print $6}')
+oc label node $(oc get nodes $HOST_LIST --no-headers -o wide | grep worker | grep -iv worker-lb | grep -iv worker-rt | grep -iv worker-spk | awk '{print $1}') bgppeer=true --overwrite=true
 
 echo "------------------COPY PODMAN NETWORK CONFIG-----------"
 cp 87-podman-bridge.conflist /etc/cni/net.d/87-podman-bridge.conflist
@@ -132,6 +133,9 @@ spec:
   myASN: $CLUSTER_ASN
   password: test
   bfdProfile: $BFD_PROFILE
+  nodeSelectors: 
+    - matchLabels:
+        bgppeer: "true"  
 EOF
 done
 
