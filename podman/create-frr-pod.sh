@@ -53,6 +53,9 @@ set ipv6 next-hop prefer-global
 
 router bgp $(($CLUSTER_ASN+$i))
   bgp router-id $POD_IP
+  no bgp network import-check
+  no bgp ebgp-requires-policy
+  no bgp default ipv4-unicast  
 EOT
 
 for node in $NODE_LIST
