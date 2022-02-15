@@ -1,14 +1,17 @@
 #!/usr/bin/env bash 
 set -e
 
-NUMBER_OF_FRR_INSTANCE=5
+NUMBER_OF_FRR_INSTANCE_LIST=(1)
 BM_NETWORK_PREF="192.168.220"
 BM_NETWORK_PREF_END="192.168.223"
 CLUSTER_ASN=65001
 BFD_PROFILE="bfdprofilefull"
-RACK_ID="e17"
-starttime=$(date +%s%N | cut -b1-13)
+RACK_ID="worker020"
+
+for NUMBER_OF_FRR_INSTANCE in ${NUMBER_OF_FRR_INSTANCE_LIST[@]}
+do
 target=$(oc get --no-headers route -n dittybopper | awk {'print $2'})
+starttime=$(date +%s%N | cut -b1-13)
 
 echo "------------------DELETE OLD FRR PODS------------------"
 old_pods=$(podman ps -a | grep frr | awk '{print $1}' | xargs)
@@ -18,6 +21,8 @@ echo "deleting pod $old_pods"
 podman stop $old_pods	
 podman rm $old_pods
 fi
+
+sleep 10
 
 echo "------------------GET OCP NODES FROM CLUSTER-----------"
 
@@ -55,7 +60,7 @@ router bgp $(($CLUSTER_ASN+$i))
   bgp router-id $POD_IP
   no bgp network import-check
   no bgp ebgp-requires-policy
-  no bgp default ipv4-unicast  
+  no bgp default ipv4-unicast
 EOT
 
 for node in $NODE_LIST
@@ -136,11 +141,11 @@ spec:
   peerAddress: $PEER_IP
   peerASN: $(($CLUSTER_ASN+$k))
   myASN: $CLUSTER_ASN
-  password: test
+  password: test 
   bfdProfile: $BFD_PROFILE
-  nodeSelectors: 
-    - matchLabels:
-        bgppeer: "true"  
+#  nodeSelectors: 
+#    - matchLabels:
+#        bgppeer: "true"
 EOF
 done
 
@@ -149,7 +154,8 @@ oc get addresspool -A
 oc get bgppeers -A
 echo "-------------------------------------------------------"
 
-
-# sleep 600
-# endtime=$(date +%s%N | cut -b1-13)
-# curl -H "Content-Type: application/json" -X POST -d "{\"dashboardId\":1,\"time\":$starttime,\"isRegion\":\"true\",\"timeEnd\":$endtime,\"tags\":[\"metallb\"],\"text\":\"$NUMBER_OF_FRR_INSTANCE sessions to 1 worker without BFD\"}" http://admin:admin@$target/api/annotations
+sleep 300 
+endtime=$(date +%s%N | cut -b1-13)
+curl -H "Content-Type: application/json" -X POST -d "{\"dashboardId\":1,\"time\":$starttime,\"isRegion\":\"true\",\"timeEnd\":$endtime,\"tags\":[\"metallb\"],\"text\":\"$NUMBER_OF_FRR_INSTANCE sessions to 1 worker with BFD session\"}" http://admin:admin@$target/api/annotations
+sleep 60
+done
