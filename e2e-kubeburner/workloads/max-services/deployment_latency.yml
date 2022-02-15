@@ -1,0 +1,25 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{.name}}-{{.Iteration}}-{{.Replica}}
+spec:
+  selector:
+    matchLabels:
+      app: {{.name}}-{{.Iteration}}-{{.Replica}}
+  template:
+    metadata:
+      labels:
+        app: {{.name}}-{{.Iteration}}-{{.Replica}}
+    spec:
+      nodeSelector: {{.nodeSelector}}
+      containers:
+      - name: {{.name}}
+        image: quay.io/cloud-bulldozer/sampleapp:latest
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: false
+      restartPolicy: Always
